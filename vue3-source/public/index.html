@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="/dist/bundle.js"></script>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script>
+    let {
+      createApp,
+      h,
+      reactive
+    } = VueReactivity
+    const App = {
+      setup() {
+        const state = reactive({
+          flag: true
+        })
+        setTimeout(() => {
+          state.flag = false
+        }, 3000);
+        return () => {
+          return h('div', {
+            style: {
+              color: 'blue'
+            }
+          }, state.flag ? [h('li', {
+            key: 'B'
+          }, 'B'), h('li', {
+            key: 'C'
+          }, 'C')] : [h('li', {
+            key: 'B'
+          }, 'B'), h('li', {
+            key: 'A'
+          }, 'A'), h('li', {
+            key: 'C'
+          }, 'C'), h('li', {
+            key: 'D'
+          }, 'D')])
+        }
+      }
+    }
+    createApp(App).mount('#app')
+  </script>
+</body>
+
+</html>

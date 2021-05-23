@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script src="/dist/vue.js"></script>
+  <div id="app">
+    <div>{{name}}</div>
+  </div>
+  <script>
+    Vue.component('my-button', {
+      template: '<button>按钮</button>'
+    });
+    let vue = new Vue({
+      el: "#app",
+      data() {
+        return {
+          name: 'lee'
+        }
+      }
+    })
+    setTimeout(() => {
+      vue.name = '1111'
+    }, 3000)
+  </script>
+</body>
+
+</html>
