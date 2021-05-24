@@ -1,4 +1,4 @@
-export function createRoute(record, loaction) {
+export function createRoute(record, location) {
   let res = []
   if (record) {
     while (record) {
@@ -8,7 +8,7 @@ export function createRoute(record, loaction) {
   }
   return {
     ...location,
-    matched: res,
+    matched: res
   }
 }
 function runQueue(queue, iterator, cb) {
