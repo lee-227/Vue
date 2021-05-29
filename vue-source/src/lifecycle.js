@@ -16,7 +16,7 @@ export function mountComponent(vm, el) {
   let updateComponent = () => {
     vm._update(vm._render())
   }
-  new Watcher(vm, updateComponent, () => {}, true)
+  new Watcher(vm, updateComponent, () => {}, true) // 初始化时就会执行 mountComponent 方法
 }
 export function callHook(vm, hook) {
   let handlers = vm.$options[hook]

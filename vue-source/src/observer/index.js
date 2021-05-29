@@ -3,17 +3,19 @@ import { Dep } from './dep'
 
 class Observer {
   constructor(data) {
+    // 给对象添加了__ob__属性 标记该对象已经劫持过了
     Object.defineProperty(data, '__ob__', {
       value: this,
       enumerable: false,
-      configurable: false,
+      configurable: false
     })
     this.dep = new Dep()
     if (Array.isArray(data)) {
+      // 数组的属性劫持 重写了数组方法
       Object.setPrototypeOf(data, arrayMethods)
       this.observeArray(data)
     } else {
-      this.walk(data)
+      this.walk(data) // 遍历劫持每个属性
     }
   }
   observeArray(data) {
@@ -23,7 +25,7 @@ class Observer {
   }
   walk(data) {
     Object.keys(data).forEach((key) => {
-      defineReactive(data, key, data[key])
+      defineReactive(data, key, data[key]) // 最终进行属劫持的方法
     })
   }
 }
@@ -41,9 +43,9 @@ export function defineReactive(data, key, value) {
       if (Dep.target) {
         dep.depend()
         if (childOb) {
-          childOb.dep.depend()
+          childOb.dep.depend() // 收集数组依赖 当我们调用数组方法修改数组成员时 该key也应该被更新 所以需要收集数组依赖
           if (Array.isArray(value)) {
-            dependArray(value)
+            dependArray(value) // 递归收集数组依赖
           }
         }
       }
@@ -54,7 +56,7 @@ export function defineReactive(data, key, value) {
       observe(newValue)
       value = newValue
       dep.notify()
-    },
+    }
   })
 }
 export function observe(data) {

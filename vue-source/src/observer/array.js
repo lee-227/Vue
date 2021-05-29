@@ -16,7 +16,7 @@ methods.forEach((method) => {
       default:
         break
     }
-    if (inserted) ob.observeArray(inserted)
+    if (inserted) ob.observeArray(inserted) // 对新增的每一项进行数据劫持
     ob.dep.notify()
     return res
   }

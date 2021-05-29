@@ -5,7 +5,7 @@ export class Dep {
     this.subs = []
   }
   depend() {
-    Dep.target.addDep(this)
+    Dep.target.addDep(this) // 让 watcher 存放 dep
   }
   addSub(watcher) {
     this.subs.push(watcher)

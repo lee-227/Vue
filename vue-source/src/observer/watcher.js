@@ -14,6 +14,7 @@ class Watcher {
     this.get()
   }
   get() {
+    // 依赖收集 将 watcher 添加到 Dep.target 上 然后触发取值操作，让属性进行依赖收集 收集当前 watcher
     pushTarget(this)
     this.getter()
     popTarget()
@@ -26,10 +27,11 @@ class Watcher {
       dep.addSub(this)
     }
   }
-  run(){
+  run() {
     this.get()
   }
   update() {
+    // 通过队列异步更新 提高性能
     queueWatcher(this)
   }
 }
