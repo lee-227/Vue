@@ -43,11 +43,11 @@
    4. 添加 Vue.observable 静态方法 添加一个响应式的对象 内部调用 observe 方法进行数据劫持
    5. 添加 Vue.component Vue.directive Vue.filter 静态方法
    6. 添加 Vue.options 静态属性
-      1. 给 options 添加全局 keep-alive 组件
+      1. 给 options 添加全局 keep-alive 组件 **TODO**
       2. 初始化 components directives filters
    7. 添加 Vue.use 静态方法 加载插件 调用插件install方法或者插件本身就是一个函数 缓存插件 防止重复安装
    8. 添加 Vue.mixin 混入方法 调用 mergeOptions 将传入的对象合并到 option 中
-   9. 添加 Vue.extend 返回组件构造函数方法
+   9. 添加 Vue.extend 返回组件构造函数方法 **TODO**
 4. core/instance/index.js 实现 Vue 构造函数
    1. 调用 initMixin 为原型添加 _init 方法
    2. 调用 stateMixin 为原型添加 $data $props $set $delete $watch 方法
