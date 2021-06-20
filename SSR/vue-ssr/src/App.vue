@@ -1,25 +1,38 @@
 <template>
   <div id="app">
-    <h3>{{message}}</h3>
-    <input v-model="message" />
-    <button @click="onClick"></button>
+    <ul>
+      <li>
+        <router-link to="/">Home</router-link>
+      </li>
+      <li>
+        <router-link to="/about">About</router-link>
+      </li>
+      <li>
+        <router-link to="/posts">Posts</router-link>
+      </li>
+    </ul>
+
+    <!-- 路由出口 -->
+    <router-view/>
   </div>
 </template>
 
 <script>
 export default {
-  data() {
+  name: 'App',
+  data () {
     return {
-      message: "lee"
-    };
+      message: 'lee'
+    }
   },
   methods: {
-    onClick() {
-      console.log(1);
+    onClick () {
+      console.log('Hello World!')
     }
   }
-};
+}
 </script>
 
-<style scoped>
+<style>
+
 </style>
