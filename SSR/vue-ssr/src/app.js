@@ -3,7 +3,7 @@ import App from './App.vue'
 import { createRouter } from './router/'
 import VueMeta from 'vue-meta'
 import { createStore } from './store'
-
+// import './main.css'
 Vue.use(VueMeta)
 
 Vue.mixin({
