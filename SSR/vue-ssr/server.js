@@ -33,9 +33,6 @@ const render = async (req, res) => {
   try {
     const html = await renderer.renderToString({
       title: 'lee',
-      meta: `
-        <meta name="description" content="lee">
-      `,
       url: req.url
     })
     res.setHeader('Content-Type', 'text/html; charset=utf8')
