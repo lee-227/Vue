@@ -48,41 +48,56 @@
    7. 添加 Vue.use 静态方法 加载插件 调用插件install方法或者插件本身就是一个函数 缓存插件 防止重复安装
    8. 添加 Vue.mixin 混入方法 调用 mergeOptions 将传入的对象合并到 option 中
    9. 添加 Vue.extend 返回组件构造函数方法 **TODO**
-4. core/instance/index.js 实现 Vue 构造函数
+4. core/instance/index.js 实现 Vue 构造函数 调用 init 方法
    1. 调用 initMixin 为原型添加 _init 方法
    2. 调用 stateMixin 为原型添加 $data $props $set $delete $watch 方法
-   3. 调用 eventsMixin 为原型添加 $on $once $off $emit 事件方法
+      1. Vue.prototype.$data 返回 vm._data
+      2. Vue.prototype.$props 返回 vm._props
+      3. Vue.prototype.$set 跟 Vue.set 一致
+      4. Vue.prototype.$delete 跟 Vue.delete 一致
+      5. Vue.prototype.$watch 
+         1. 创建一个用户 watcher 该 watcher 拥有 user 标记属性
+   3. 调用 eventsMixin 为原型 Vue.prototype 添加 $on $once $off $emit 事件方法
    4. 调用 lifecycleMixin 为原型添加 _update $forceUpdate $destroy
       1. _update 会调用 __patch__ 方法将虚拟dom 渲染成真实dom 首次渲染会调用，更新时也会调用
+      2. $forceUpdate 调用 vm._watcher.update()
    5. 调用 renderMixin 为原型添加 $nextTick _render
-      1. _render 方法会获取最终用户传入的render 或者 由模板编译来的render方法执行 生成虚拟dom
-      2. 为原型添加在 render 函数中所使用的工具方法 用于生成不同的虚拟dom
+      1. installRenderHelpers 添加 render 函数中将 ast 生成 Vnode 的函数 _v _s 等
+      2. _render 方法会获取最终用户传入的render 或者 由模板编译来的render方法执行 生成虚拟dom
+      3. 为原型添加在 render 函数中所使用的工具方法 用于生成不同的虚拟dom
 
 
 ## Vue 首次渲染的过程
 1. new Vue 时会调用 _init 方法初始化实例
-   1. 调用 initLifecycle 方法 为实例添加父子依赖关系 $parent $children $root
-   2. 调用 initEvents 方法 初始化监听事件 注册将父组件绑定在当前组件的事件
-   3. 调用 initRender 方法 初始化 
+   1. 将初始化的 options 跟传入的 options 进行合并
+   2. initLifecycle 初始化 $children/$parent/$root/$refs 变量
+      1. 建立组件间的父子依赖图
+      2. 设置标记属性作为某个阶段的标识
+   3. initEvents 初始化 _events 变量 将父组件传递的函数绑定到该组件的$on上
+   4. 调用 initRender 方法 初始化 
       1. 初始化 $slots $scopedSlots 
       2. _c 处理编译生成的 render 函数 $createElement 处理手写的 render 函数 
       3. 定义 $attrs $listeners 属性
-   4. 触发 beforeCreate 钩子
-   5. 调用 initInjections 将 inject 的成员注入实例
-   6. 调用 initState
-      1. initProps
-      2. initMethods
-      3. initData
-      4. initComputed
-      5. initWatch
-   7. 调用 initProvide 初始化 provide
-   8. 触发 created 钩子
-   9. 调用 $mount 开始挂载 实际调用 mountComponent 方法
-   10. 触发 beforeMount 钩子 开始挂载
-   11. 创建 updateComponent 回调函数 该函数会先执行 render 生成虚拟dom 然后调用 _update 将虚拟dom 生成真实dom
-   12. 创建渲染 Watcher 传入 updateComponent 方法 调用 该方法进行挂载
-   13. 触发 mounted 钩子 渲染结束
-  
+   5. 触发 beforeCreate 钩子
+   6. 调用 initInjections 将 inject 注入的属性响应式的添加到 vm 上
+   7. 调用 initState 初始化 props methods data computed watch
+      1. initProps 将传入的 prop 依次响应式的定义到 vm._props 上 将每个prop 代理到 vm._props 上取值
+      2. initMethods 将每个 method 定义到 vm 上 并通过 bind 重新绑定 this 为当前 vm 实例
+      3. initData 数据劫持
+      4. initComputed 初始化 vm._computedWatchers 用于保存该实例的所有计算属性watcher 遍历每个属性创建watcher 在 vm 上添加改属性 ，取值时在_computedWatchers获取对应的watcher 获取对应的值
+      5. initWatch 遍历每个watch 依次调用 vm.$watch 方法
+   8. 调用 initProvide 将 provide 存储到 vm._provided 上供子组件使用
+   9.  触发 created 钩子
+   10. 判断是否有 vm.$options.el 有的话调用 vm.$mount(vm.$options.el) 进行挂载 实际调用 mountComponent 方法
+   11. 触发 beforeMount 钩子 开始挂载
+   12. 创建 updateComponent 回调函数 
+   13. 创建渲染 Watcher 传入 updateComponent 方法
+   14. 调用 updateComponent 该函数会先执行 render 生成虚拟dom 然后调用 _update 将虚拟dom 生成真实dom
+   15. render 执行流程
+       1. render 函数 内部是许多的工具函数调用 _c _s _v等 用于生产虚拟 dom
+   16. _update 实际调用 patch 方法进行 dom diff 生产真实节点
+   17. 触发 mounted 钩子 渲染结束
+
 ## Vue 响应式原理
 - Dep 构造函数 该函数功能为负责收集依赖 通知各个依赖更新
 
@@ -91,17 +106,17 @@
    2. 调用 observe 对 data 进行拦截
    3. 判断传入的 data 是否为对象 不是对象不做任何处理
    4. 是对象则 new Observer 拦截
-   5. 为该对象创建 dep 对象 收集依赖
+   5. 为实例创建 dep 对象 收集该对象的依赖 给 set 方法还有数组使用
    6. 定义 __ob__ 属性 值为该对象自己 标记为已经做过拦截的对象
    7. 如果是数组 重写数组的原型对象 遍历元素 对元素调用 observe 进行拦截
       1. 重写了 push pop shift unshift reverse splice sort 这7个方法，该方法会改变原数组。
       2. 拦截 push unshift splice 添加的数据，对这些数据进行拦截
       3. 触发该数组的 __ob__ 对象的 dep 的 notify 发送通知
    8. 如果是对象，调用 walk 方法遍历对象，对对象的每个属性进行劫持
-   9. 调用 defineReactive 为每个属性创建 dep 收集依赖同时拦截属性的 get set 操作
+   9. 调用 defineReactive 为每个属性创建 dep 收集属性依赖同时拦截属性的 get set 操作
    10. 内部调用 Object.defineProperty 方法
-   11. get 取值时 该属性跟该对象的 dep 会将 Dep.target (当前取值的 watcher) 作为依赖收集
-   12. set 修改值时 会调用该属性的 dep 的 notify 方法通知 watcher 更新
+   11. get 取值时 该属性跟该对象的 dep 会将 Dep.target (当前取值的 watcher) 作为依赖收集 如果此时的值是数组 遍历数组 让数组中的对象收集依赖
+   12. set 修改值时 会调用该属性的 dep 的 notify 方法通知 watcher 更新 同时调用 observe 将新赋值的对象进行数据劫持操作
 
 
 2. Watcher 分为 渲染watcher 用户watcher 技术属性watcher 三种
@@ -112,11 +127,24 @@
 1. vue 通过 compileToFunctions 该函数编译模板 生成 render 函数
 2. compileToFunctions 由 createCompiler 函数生成 该函数是高阶函数 此时会传入 baseOptions 与平台相关的一些工具方法
 3. createCompiler 由 createCompilerCreator 函数生成 该函数是高阶函数 此时会传入 baseCompile 核心编译方法
-4. 当我们调用 createCompiler 时 会通过传入的 baseOptions 跟 baseCompile 生成最终的 createCompileToFunctionFn 函数
-5. 调用 createCompileToFunctionFn 进行编译时
+4. 当我们调用 createCompiler 时 会通过传入的 baseOptions 跟 baseCompile 生成最终的 compileToFunctions 函数
+5. 调用 compileToFunctions 进行编译时 核心过程
    1. 先将传入的 template 转换成抽象语法树 原理不断截取 template 字符串 匹配标签头，标签中的属性，生成父子依赖，最终生成一颗表示html的抽象语法树
    2. 优化生成的抽象语法树 主要是标记静态节点 既不会发生变化的节点，进行更新时 domdiff 会跳过这些节点 提高性能。
    3. 将优化后的抽象语法树 生成字符串形式的代码 
       1. 递归 ast 语法树 根据不同的节点使用不同的函数进行包裹生成一段一段字符串代码，将字符串拼接
       2. 最终生成的字符串代码在使用 with 进行包裹 传入 this 对象生成最终的字符串代码
    4. 使用 new Function 传入字符串代码 生成最终的 render 函数
+
+
+## 组件的渲染流程
+1. 在生成虚拟dom时会通过判断tag是否浏览器原生标签，不是当做组件处理，调用createComponent
+2. 通过 tag 在 components 中找到对应的组件定义
+3. 通过 Vue.extend方法创造一个子组件的构造函数
+4. 在该组件添加 init 钩子函数
+5. 生成组件的虚拟dom
+6. 在调用 patch 将虚拟 dom 生成真实dom时
+7. 在组件的虚拟 dom 中获取到 init 钩子函数并调用
+   1. init 函数会调用该组件的构造函数生成组件实例并挂载到改Vnode上
+   2. 调用实例的 $mount 方法 生成真实dom 此时不进行挂载
+8. 将生成的真实dom插入到父元素中
