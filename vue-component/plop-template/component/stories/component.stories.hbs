@@ -1,0 +1,15 @@
+import LeeVue{{properCase name}} from '../src/{{name}}.vue'
+
+export default {
+  title: 'LeeVue-{{properCase name}}',
+  component: LeeVue{{properCase name}}
+}
+
+export const {{properCase name}} = _ => ({
+  components: { LeeVue{{properCase name}} },
+  template: `
+    <div>
+      <lee-vue-{{name}}></lee-vue-{{name}}>
+    </div>
+  `
+})
