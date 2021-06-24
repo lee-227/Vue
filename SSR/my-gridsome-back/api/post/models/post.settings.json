@@ -35,9 +35,9 @@
       "required": true,
       "pluginOptions": {}
     },
-    "tags": {
-      "via": "posts",
-      "collection": "tag"
+    "author": {
+      "type": "string",
+      "required": true
     }
   }
 }
