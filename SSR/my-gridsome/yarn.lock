@@ -951,8 +951,8 @@
 
 "@gridsome/source-strapi@^0.2.0":
   version "0.2.0"
-  resolved "https://registry.npmjs.org/@gridsome/source-strapi/-/source-strapi-0.2.0.tgz#e57401f7fc5f1ec6b046cb831abca68e9d5bd10e"
-  integrity sha512-LSPu3am/TqIgW6BCj4DWFbRbaLOR2kpnxM+2RIuL6dWE9h9XMNUFVfUSGuI4WOwwPDJEw2l6QYJJYvtBXBJ7Jw==
+  resolved "https://registry.nlark.com/@gridsome/source-strapi/download/@gridsome/source-strapi-0.2.0.tgz#e57401f7fc5f1ec6b046cb831abca68e9d5bd10e"
+  integrity sha1-5XQB9/xfHsawRsuDGrymjp1b0Q4=
   dependencies:
     axios "^0.19.0"
     lodash "^4.17.11"

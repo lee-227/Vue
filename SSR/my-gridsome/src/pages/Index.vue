@@ -1,6 +1,9 @@
 <template>
   <Layout>
-    <header class="masthead" style="background-image: url('assets/img/home-bg.jpg')">
+    <header
+      class="masthead"
+      style="background-image: url('assets/img/home-bg.jpg')"
+    >
       <div class="container position-relative px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
           <div class="col-md-10 col-lg-8 col-xl-7">
@@ -15,82 +18,70 @@
     <div class="container px-4 px-lg-5">
       <div class="row gx-4 gx-lg-5 justify-content-center">
         <div class="col-md-10 col-lg-8 col-xl-7">
-          <!-- Post preview-->
-          <div class="post-preview">
-            <a href="post.html">
-              <h2 class="post-title">Man must explore, and this is exploration at its greatest</h2>
-              <h3 class="post-subtitle">Problems look mighty small from 150 miles up</h3>
-            </a>
-            <p class="post-meta">
-              Posted by
-              <a href="#!">Start Bootstrap</a>
-              on September 24, 2021
-            </p>
-          </div>
-          <!-- Divider-->
-          <hr class="my-4" />
-          <!-- Post preview-->
-          <div class="post-preview">
-            <a href="post.html">
-              <h2
-                class="post-title"
-              >I believe every human has a finite number of heartbeats. I don't intend to waste any of mine.</h2>
-            </a>
-            <p class="post-meta">
-              Posted by
-              <a href="#!">Start Bootstrap</a>
-              on September 18, 2021
-            </p>
-          </div>
-          <!-- Divider-->
-          <hr class="my-4" />
-          <!-- Post preview-->
-          <div class="post-preview">
-            <a href="post.html">
-              <h2 class="post-title">Science has not yet mastered prophecy</h2>
-              <h3
-                class="post-subtitle"
-              >We predict too much for the next year and yet far too little for the next ten.</h3>
-            </a>
-            <p class="post-meta">
-              Posted by
-              <a href="#!">Start Bootstrap</a>
-              on August 24, 2021
-            </p>
-          </div>
-          <!-- Divider-->
-          <hr class="my-4" />
-          <!-- Post preview-->
-          <div class="post-preview">
-            <a href="post.html">
-              <h2 class="post-title">Failure is not an option</h2>
-              <h3
-                class="post-subtitle"
-              >Many say exploration is part of our destiny, but it’s actually our duty to future generations.</h3>
-            </a>
-            <p class="post-meta">
-              Posted by
-              <a href="#!">Start Bootstrap</a>
-              on July 8, 2021
-            </p>
-          </div>
-          <!-- Divider-->
-          <hr class="my-4" />
+          <template v-for="(edge, index) in $page.posts.edges">
+            <!-- Post preview-->
+            <div class="post-preview" :key="edge.node.id">
+              <g-link :to="'/post/' + edge.node.id">
+                <h2 class="post-title">
+                  {{ edge.node.title }}
+                </h2>
+              </g-link>
+              <p class="post-meta">
+                <span
+                  v-for="tag in edge.node.tags"
+                  :key="edge.node.id + tag.name"
+                >
+                  {{ tag.name }}
+                </span>
+              </p>
+            </div>
+            <!-- Divider-->
+            <hr class="my-4" :key="edge.node.id + index" />
+          </template>
+        </div>
+      </div></div
+  ></Layout>
+</template>
           <!-- Pager-->
           <div class="d-flex justify-content-end mb-4">
-            <a class="btn btn-primary text-uppercase" href="#!">Older Posts →</a>
+            <a class="btn btn-primary text-uppercase" href="#!"
+              >Older Posts →</a
+            >
           </div>
+          <!-- <Pager :info="$page.allStrapiPost.pageInfo" /> -->
         </div>
       </div>
     </div>
   </Layout>
 </template>
-
+<page-query>
+query ($page: Int){
+	posts:allStrapiPost(perPage: 2, page: $page)@paginate{
+    pageInfo {
+      totalPages
+      currentPage
+    }
+    edges{
+      node{
+        id
+        title
+        tags{
+          name
+        }
+      }
+    }
+  }
+}
+</page-query>
 <script>
+// import { Pager } from "gridsome";
 export default {
   metaInfo: {
-    title: "Index Page"
-  }
+    title: "Index Page",
+  },
+  // components: {
+  //   Pager,
+  // },
 };
 </script>
 

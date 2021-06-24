@@ -1,12 +1,12 @@
-const c1 = () => import(/* webpackChunkName: "page--src-pages-post-vue" */ "C:\\Users\\20759\\Desktop\\lg\\vue\\SSR\\my-gridsome\\src\\pages\\Post.vue")
-const c2 = () => import(/* webpackChunkName: "page--src-pages-contact-vue" */ "C:\\Users\\20759\\Desktop\\lg\\vue\\SSR\\my-gridsome\\src\\pages\\Contact.vue")
-const c3 = () => import(/* webpackChunkName: "page--src-pages-about-vue" */ "C:\\Users\\20759\\Desktop\\lg\\vue\\SSR\\my-gridsome\\src\\pages\\About.vue")
-const c4 = () => import(/* webpackChunkName: "page--node-modules-gridsome-app-pages-404-vue" */ "C:\\Users\\20759\\Desktop\\lg\\vue\\SSR\\my-gridsome\\node_modules\\gridsome\\app\\pages\\404.vue")
-const c5 = () => import(/* webpackChunkName: "page--src-pages-index-vue" */ "C:\\Users\\20759\\Desktop\\lg\\vue\\SSR\\my-gridsome\\src\\pages\\Index.vue")
+const c1 = () => import(/* webpackChunkName: "page--src-templates-post-vue" */ "D:\\learn\\vue\\SSR\\my-gridsome\\src\\templates\\Post.vue")
+const c2 = () => import(/* webpackChunkName: "page--src-pages-contact-vue" */ "D:\\learn\\vue\\SSR\\my-gridsome\\src\\pages\\Contact.vue")
+const c3 = () => import(/* webpackChunkName: "page--src-pages-about-vue" */ "D:\\learn\\vue\\SSR\\my-gridsome\\src\\pages\\About.vue")
+const c4 = () => import(/* webpackChunkName: "page--node-modules-gridsome-app-pages-404-vue" */ "D:\\learn\\vue\\SSR\\my-gridsome\\node_modules\\gridsome\\app\\pages\\404.vue")
+const c5 = () => import(/* webpackChunkName: "page--src-pages-index-vue" */ "D:\\learn\\vue\\SSR\\my-gridsome\\src\\pages\\Index.vue")
 
 export default [
   {
-    path: "/post/",
+    path: "/post/:id/",
     component: c1
   },
   {
@@ -24,7 +24,7 @@ export default [
   },
   {
     name: "home",
-    path: "/",
+    path: "/:page(\\d+)?/",
     component: c5
   },
   {
