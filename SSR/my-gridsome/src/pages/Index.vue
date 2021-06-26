@@ -2,14 +2,16 @@
   <Layout>
     <header
       class="masthead"
-      style="background-image: url('assets/img/home-bg.jpg')"
+      :style="`background-image: url('http://106.75.254.155:1337${$page.website.edges[0].node.image.url}')`"
     >
       <div class="container position-relative px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
           <div class="col-md-10 col-lg-8 col-xl-7">
             <div class="site-heading">
-              <h1>Clean Blog</h1>
-              <span class="subheading">A Blog Theme by Start Bootstrap</span>
+              <h1>{{ $page.website.edges[0].node.title }}</h1>
+              <span class="subheading">{{
+                $page.website.edges[0].node.sub_title
+              }}</span>
             </div>
           </div>
         </div>
@@ -38,10 +40,6 @@
             <!-- Divider-->
             <hr class="my-4" :key="edge.node.id + index" />
           </template>
-        </div>
-      </div></div
-  ></Layout>
-</template>
           <!-- Pager-->
           <div class="d-flex justify-content-end mb-4">
             <a class="btn btn-primary text-uppercase" href="#!"
@@ -67,6 +65,17 @@ query ($page: Int){
         title
         tags{
           name
+        }
+      }
+    }
+  }
+  website:allStrapiWebsite{
+    edges{
+      node{
+        title
+        sub_title
+        image{
+          url
         }
       }
     }

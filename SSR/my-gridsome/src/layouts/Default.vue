@@ -20,7 +20,7 @@
             <li class="nav-item">
               <g-link class="nav-link px-lg-3 py-3 py-lg-4" to="/">Home</g-link>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <g-link class="nav-link px-lg-3 py-3 py-lg-4" to="/about">About</g-link>
             </li>
             <li class="nav-item">
@@ -28,7 +28,7 @@
             </li>
             <li class="nav-item">
               <g-link class="nav-link px-lg-3 py-3 py-lg-4" to="/post">Post</g-link>
-            </li>
+            </li> -->
           </ul>
         </div>
       </div>
@@ -64,7 +64,9 @@
                 </a>
               </li>
             </ul>
-            <div class="small text-center text-muted fst-italic">Copyright &copy; Your Website 2021</div>
+            <div class="small text-center text-muted fst-italic">
+              Copyright &copy; Your Website 2021
+            </div>
           </div>
         </div>
       </div>
