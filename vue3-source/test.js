@@ -27,6 +27,6 @@ var lengthOfLIS = function (nums) {
   while (--len) {
     last.unshift(nums[resArr[res[len]]])
   }
-  return res.length
+  return last
 }
 console.log(lengthOfLIS([2, 3, 1, 5, 6, 8, 7, 9, 4]))
