@@ -1,25 +1,5 @@
 <template>
-  <div id="app">
-    <el-button>默认按钮</el-button>
-    <el-button type="primary">主要按钮</el-button>
-    <el-button type="success">成功按钮</el-button>
-    <el-button type="info">信息按钮</el-button>
-    <el-button type="warning">警告按钮</el-button>
-    <el-button type="danger">危险按钮</el-button>
-    <router-view />
-  </div>
+  <router-view />
 </template>
-<script lang="ts">
-import Vue from "vue";
-export default Vue.extend({
-  data() {
-    return {
-      a: {
-        b: "1",
-      },
-    };
-  },
-  methods: {},
-});
-</script>
-<style lang="scss" scoped></style>
+
+<style lang="scss"></style>
