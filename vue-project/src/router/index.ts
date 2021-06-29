@@ -127,6 +127,15 @@ const routes: Array<RouteRecordRaw> = [
           ),
         props: true,
       },
+      {
+        path: "/course/:courseId/video",
+        name: "course-video",
+        component: () =>
+          import(
+            /* webpackChunkName: 'course-video' */ "@/views/course/video.vue"
+          ),
+        props: true,
+      },
     ],
   },
   {
