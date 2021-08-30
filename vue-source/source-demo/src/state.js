@@ -13,10 +13,10 @@ export function initState(vm) {
     initData(vm)
   }
   if (opts.computed) {
-    initComputed(vm)
+    initComputed(vm, opts.computed)
   }
   if (opts.watch) {
-    initWatch(vm)
+    initWatch(vm, opts.watch)
   }
 }
 function initData(vm) {
@@ -36,6 +36,67 @@ function proxy(vm, source, key) {
     },
     set(val) {
       vm[source][key] = val
-    }
+    },
   })
+}
+
+function initWatch(vm, watch) {
+  for (const key in watch) {
+    let handler = watch[key]
+    if (Array.isArray(handler)) {
+      handler.forEach((h) => {
+        createWatcher(vm, key, h)
+      })
+    } else {
+      createWatcher(vm, key, handler)
+    }
+  }
+}
+function createWatcher(vm, exprOrFn, handler, options) {
+  if (typeof handler === 'object' && handler !== null) {
+    options = handler
+    handler = handler.handler
+  }
+  if (typeof handler === 'string') {
+    handler = vm[handler]
+  }
+  return vm.$watch(exprOrFn, handler, options)
+}
+
+function initComputed(vm, computed) {
+  // 存放计算属性的watcher
+  const watchers = (vm._computedWatchers = {})
+  for (const key in computed) {
+    const userDef = computed[key]
+    // 创建计算属性watcher
+    watchers[key] = new Watcher(vm, userDef, () => {}, { lazy: true })
+    defineComputed(vm, key, userDef)
+  }
+}
+function defineComputed(target, key, userDef) {
+  if (typeof userDef === 'function') {
+    sharedPropertyDefinition.get = createComputedGetter(key)
+  } else {
+    sharedPropertyDefinition.get = createComputedGetter(userDef.get)
+    sharedPropertyDefinition.set = userDef.set
+  }
+  // 使用defineProperty定义
+  Object.defineProperty(target, key, sharedPropertyDefinition)
+}
+function createComputedGetter(key) {
+  return function computedGetter() {
+    const watcher = this._computedWatchers[key]
+    if (watcher) {
+      if (watcher.dirty) {
+        // 如果dirty为true
+        watcher.evaluate() // 计算出新值，并将dirty 更新为false
+      }
+      if (Dep.target) {
+        // 计算属性在模板中使用 则存在Dep.target
+        watcher.depend()
+      }
+      // 如果依赖的值不发生变化，则返回上次计算的结果
+      return watcher.value
+    }
+  }
 }

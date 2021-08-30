@@ -34,4 +34,12 @@ export function initMixin(Vue) {
     }
     mountComponent(vm, el) // 有了渲染函数之后创建渲染 watcher
   }
+  Vue.prototype.$watch = function (exprOrFn, cb, options = {}) {
+    options.user = true // 标记为用户watcher
+    // 核心就是创建个watcher
+    const watcher = new Watcher(this, exprOrFn, cb, options)
+    if (options.immediate) {
+      cb.call(vm, watcher.value)
+    }
+  }
 }
