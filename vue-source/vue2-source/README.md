@@ -1,6 +1,6 @@
 ## Vue 初始化
 1. 在 entry-runtime-with-comipiler 文件中重写 $mount 方法 为其添加模板编译的功能
-   1. 判断 options中 是否存在 render 方法 存在 render 则直接使用该 render 函数
+   1. 判断 options 中 是否存在 render 方法 存在 render 则直接使用该 render 函数
    2. 不存在 render 判断是否有 template 将 template 作为模板
    3. 再判断是否有 el 获取 el 对应的 outerHTML 作为template 模板
    4. 将 template 通过 compileToFunctions 编译为 render 函数
