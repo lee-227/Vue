@@ -26,6 +26,9 @@ export default {
   },
   mounted() {
     // this.getPosts();
+    if (!this.posts.length) {
+      // this.getPosts();
+    }
     console.log(this.posts);
   },
   // Vue SSR 特殊为服务端渲染提供的一个生命周期钩子函数

@@ -17,14 +17,14 @@ if (isProd) {
   const clientManifest = require('./dist/vue-ssr-client-manifest.json')
   renderer = createBundleRenderer(serverBundle, {
     template,
-    clientManifest
+    clientManifest,
   })
 } else {
   // 开发模式 -> 监视打包构建 -> 重新生成 Renderer 渲染器
   onReady = setupDevServer(server, (serverBundle, template, clientManifest) => {
     renderer = createBundleRenderer(serverBundle, {
       template,
-      clientManifest
+      clientManifest,
     })
   })
 }
@@ -33,11 +33,12 @@ const render = async (req, res) => {
   try {
     const html = await renderer.renderToString({
       title: 'lee',
-      url: req.url
+      url: req.url,
     })
     res.setHeader('Content-Type', 'text/html; charset=utf8')
     res.end(html)
   } catch (err) {
+    console.log(err)
     res.status(500).end('Internal Server Error.')
   }
 }
@@ -51,7 +52,7 @@ server.get(
         // 等待有了 Renderer 渲染器以后，调用 render 进行渲染
         await onReady
         render(req, res)
-      }
+      },
 )
 
 server.listen(3000, () => {
