@@ -29,7 +29,7 @@ class RefImpl {
 
 export const toRefs = (object) => {
   const result = isArray(object) ? new Array(object.length) : {};
-  for (const key in object) {
+  for (const key in object) { 
     if (Object.prototype.hasOwnProperty.call(object, key)) {
       result[key] = new ObjectRefImpl(object, key);
     }
