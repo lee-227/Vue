@@ -1,6 +1,6 @@
 # vuex-source
 
-## Project setup
+## Project setup 
 ```
 yarn install
 ```
